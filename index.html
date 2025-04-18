@@ -6,38 +6,33 @@
   <title>Bible Verse Viewer</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0; height: 100%;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1572308482406-010256587e1c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&dl=jon-tyson-H6gTVBETAI4-unsplash.jpg') no-repeat center center fixed;
+      background: url('https://images.unsplash.com/photo-1572308482406-010256587e1c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&dl=jon-tyson-H6gTVBETAI4-unsplash.jpg')
+                  no-repeat center center fixed;
       background-size: cover;
+      overflow-y: auto;
     }
 
+    /* only change text color on dark, leave background-image intact */
     body.dark {
-      background-color: #121212;
       color: #ecf0f1;
     }
 
     .app-wrapper {
-      display: flex;
-      flex-direction: column;
-      background-color: rgba(255, 255, 255, 0.85);
+      display: flex; flex-direction: column; min-height: 100vh;
+      background-color: rgba(255,255,255,0.85);
       backdrop-filter: blur(4px);
-      min-height: 100vh;
     }
-
     body.dark .app-wrapper {
-      background-color: rgba(20, 20, 20, 0.85);
+      background-color: rgba(20,20,20,0.85);
     }
 
     header, footer {
-      padding: 1rem;
-      text-align: center;
+      padding: 1rem; text-align: center;
     }
 
     .scroll-content {
@@ -45,86 +40,55 @@
     }
 
     .container {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
+      max-width: 600px; margin: 0 auto; text-align: center;
     }
 
     select, button {
-      margin: 0.5rem;
-      padding: 0.6rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      margin: .5rem; padding: .6rem;
+      font-size: 1rem; border-radius: 8px; border: 1px solid #ccc;
     }
 
     button {
-      background-color: #5c6bc0;
-      color: white;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      transition: background 0.3s;
+      background-color: #5c6bc0; color: #fff; border: none;
+      display: flex; align-items: center; justify-content: center;
+      gap: 5px; cursor: pointer; transition: background .3s;
     }
-
-    button:hover {
-      background-color: #3f51b5;
-    }
+    button:hover { background-color: #3f51b5; }
 
     .card {
-      margin: 2rem auto 1rem;
-      width: 100%;
-      max-width: 400px;
-      min-height: 400px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.4s ease;
+      margin: 2rem auto; width: 100%; max-width: 400px; min-height: 400px;
+      background-color: #fff; border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.3);
+      padding: 1.5rem; display: flex;
+      flex-direction: column; justify-content: center; align-items: center;
+      transition: transform .4s ease;
+      touch-action: none; /* prevent page scroll when swiping */
     }
-
     body.dark .card {
-      background: #2c3e50;
-      color: white;
+      background-color: #2c3e50; color: #fff;
     }
-
     .card.swipe {
-      animation: swipeEffect 0.3s ease;
+      animation: swipeEffect .3s ease;
     }
-
     @keyframes swipeEffect {
       0% { transform: scale(1.02); }
       100% { transform: scale(1); }
     }
 
     .verse-ref {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
+      font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;
     }
 
     .btn-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 1rem;
+      display: flex; justify-content: center; gap: 10px; margin-top: 1rem;
     }
 
     @media (max-width: 600px) {
-      select, button {
-        width: 100%;
-      }
+      select, button { width: 100%; }
     }
   </style>
 </head>
-<body class="light">
+<body class="dark">
   <div class="app-wrapper">
     <header>
       <h1>Bible Verse Viewer</h1>
@@ -139,7 +103,7 @@
           <select id="chapterSelect"></select>
         </div>
 
-        <!-- Verse Card -->
+        <!-- Verse Card (swipe here) -->
         <div class="card" id="verseCard">
           <div class="verse-ref" id="verseRef">Loading...</div>
           <div id="verseText">Please wait...</div>
@@ -159,7 +123,6 @@
     </footer>
   </div>
 
-  <!-- JS Script -->
   <script>
     const books = [
       'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
@@ -171,24 +134,24 @@
       '2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
     ];
 
-    const bookSelect = document.getElementById('bookSelect');
+    const bookSelect    = document.getElementById('bookSelect');
     const chapterSelect = document.getElementById('chapterSelect');
-    const verseCard = document.getElementById('verseCard');
+    const verseCard     = document.getElementById('verseCard');
 
-    let currentBook = 'John';
-    let currentChapter = 1;
+    let currentBook       = 'John';
+    let currentChapter    = 1;
     let currentVerseIndex = 0;
-    let verses = [];
+    let verses            = [];
+    let touchStartX       = 0;
+    let touchEndX         = 0;
 
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    books.forEach(book => {
-      const option = document.createElement('option');
-      option.value = book;
-      option.textContent = book;
-      if (book === currentBook) option.selected = true;
-      bookSelect.appendChild(option);
+    // Populate books dropdown
+    books.forEach(b => {
+      const o = document.createElement('option');
+      o.value = b;
+      o.textContent = b;
+      if (b === currentBook) o.selected = true;
+      bookSelect.appendChild(o);
     });
 
     bookSelect.addEventListener('change', () => {
@@ -198,18 +161,18 @@
     });
 
     chapterSelect.addEventListener('change', () => {
-      currentChapter = parseInt(chapterSelect.value);
+      currentChapter = +chapterSelect.value;
       fetchVerses();
     });
 
     function updateChapters() {
       chapterSelect.innerHTML = '';
       for (let i = 1; i <= 50; i++) {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = `Chapter ${i}`;
-        if (i === currentChapter) opt.selected = true;
-        chapterSelect.appendChild(opt);
+        const o = document.createElement('option');
+        o.value = i;
+        o.textContent = `Chapter ${i}`;
+        if (i === currentChapter) o.selected = true;
+        chapterSelect.appendChild(o);
       }
       fetchVerses();
     }
@@ -223,10 +186,10 @@
     }
 
     function showVerse() {
-      const verse = verses[currentVerseIndex];
-      if (!verse) return;
-      document.getElementById('verseRef').textContent = `${verse.book_name} ${verse.chapter}:${verse.verse}`;
-      document.getElementById('verseText').textContent = verse.text;
+      const v = verses[currentVerseIndex];
+      if (!v) return;
+      document.getElementById('verseRef').textContent = `${v.book_name} ${v.chapter}:${v.verse}`;
+      document.getElementById('verseText').textContent = v.text;
     }
 
     function nextVerse() {
@@ -249,38 +212,31 @@
     }
 
     function shareVerse() {
-      const text = `${document.getElementById('verseRef').textContent}\n\n${document.getElementById('verseText').textContent}`;
-      if (navigator.share) {
-        navigator.share({ text });
-      } else {
-        navigator.clipboard.writeText(text);
-        alert("Verse copied to clipboard!");
+      const ref = document.getElementById('verseRef').textContent;
+      const txt = `${ref}\n\n${document.getElementById('verseText').textContent}`;
+      if (navigator.share) navigator.share({ text: txt });
+      else {
+        navigator.clipboard.writeText(txt);
+        alert('Verse copied to clipboard!');
       }
     }
 
-    // Touch Swipe Events
+    // Swipe on the card
     verseCard.addEventListener('touchstart', e => {
       touchStartX = e.changedTouches[0].screenX;
     });
-
     verseCard.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    });
-
-    function handleSwipe() {
       const diff = touchEndX - touchStartX;
       if (Math.abs(diff) > 50) {
         verseCard.classList.add('swipe');
         setTimeout(() => verseCard.classList.remove('swipe'), 300);
-        if (diff > 0) {
-          prevVerse();  // swipe right
-        } else {
-          nextVerse();  // swipe left
-        }
+        if (diff > 0) prevVerse();
+        else nextVerse();
       }
-    }
+    });
 
+    // Initialize
     updateChapters();
   </script>
 </body>
