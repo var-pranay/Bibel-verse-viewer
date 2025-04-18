@@ -1,18 +1,11 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bible Verse Viewer</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --radius: 12px;
-      --shadow: 0 8px 24px rgba(0,0,0,0.3);
-      --transition: 0.3s ease;
-    }
-
     * {
       box-sizing: border-box;
     }
@@ -20,121 +13,147 @@
     html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100%;
       background: url('https://images.unsplash.com/photo-1572308482406-010256587e1c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&dl=jon-tyson-H6gTVBETAI4-unsplash.jpg') no-repeat center center fixed;
       background-size: cover;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     body.dark {
-      background-color: #0c0c0c;
-      color: #f0f0f0;
+      color: #ecf0f1;
+    }
+
+    body.light {
+      color: #222;
     }
 
     .app-wrapper {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      background-color: rgba(20, 20, 20, 0.85);
+      backdrop-filter: blur(5px);
+    }
+
+    body.light .app-wrapper {
+      background-color: rgba(255, 255, 255, 0.85);
     }
 
     header {
-      padding: 1rem 1rem 0.5rem;
-      text-align: center;
-      color: #ffffff;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
     }
 
-    header h1 {
-      font-weight: 600;
-      font-size: 1.6rem;
-      margin: 0;
+    .heading {
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
     .theme-toggle {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      z-index: 10;
-      background: rgba(0,0,0,0.5);
-      border: none;
-      border-radius: 50%;
-      padding: 0.5rem;
       cursor: pointer;
-      color: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      transition: background 0.3s ease;
+      font-size: 1.8rem;
+      color: #f1c40f;
     }
 
-    .theme-toggle span {
-      font-size: 22px;
-    }
-
-    .theme-toggle:hover {
-      background: rgba(0,0,0,0.7);
+    body.light .theme-toggle {
+      color: #000;
     }
 
     .scroll-content {
       padding: 1rem;
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      flex: 1;
+      overflow: hidden;
     }
 
     .container {
-      width: 100%;
-      max-width: 500px;
+      max-width: 600px;
+      margin: 0 auto;
       text-align: center;
-      padding: 0 1rem;
     }
 
-    select, button {
-      margin: 0.5rem 0.25rem;
-      padding: 0.6rem 1rem;
+    select {
+      margin: 0.5rem;
+      padding: 0.6rem;
       font-size: 1rem;
-      border-radius: var(--radius);
-      border: 1px solid #ccc;
-      font-family: inherit;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: 0.3s ease;
+    }
+
+    select:focus {
+      outline: 2px solid #5c6bc0;
+    }
+
+    body.light select {
+      background: rgba(255, 255, 255, 0.7);
+      color: #000;
+    }
+
+    .card {
+      margin: 2rem auto 1rem;
+      width: 100%;
+      max-width: 400px;
+      min-height: 400px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(8px);
+      color: #fff;
+      user-select: none;
+      touch-action: pan-y;
+    }
+
+    body.light .card {
+      background: rgba(0, 0, 0, 0.05);
+      color: #111;
+    }
+
+    .verse-ref {
+      font-weight: bold;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1rem;
     }
 
     button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
       background-color: #5c6bc0;
       color: white;
-      border: none;
-      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 5px;
-      transition: background var(--transition);
+      cursor: pointer;
+      transition: 0.3s ease;
     }
 
     button:hover {
       background-color: #3f51b5;
     }
 
-    .card {
-      margin: 1.5rem auto;
-      width: 100%;
-      max-width: 420px;
-      min-height: 260px;
-      background-color: rgba(255, 255, 255, 0.5);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.3rem 1rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-size: 1rem;
-      font-weight: 600;
-      backdrop-filter: blur(3px);
-      transition: var(--transition);
-    }
-
-    body.dark .card {
-      background-color: rgba(43, 58, 66, 0.55);
-      color: #f0f0f0;
+    body.light button {
+      background-color: #3f51b5;
     }
 
     .card.swipe {
@@ -146,70 +165,36 @@
       100% { transform: scale(1); }
     }
 
-    .verse-ref {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    .btn-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-    }
-
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.3rem;
+      header {
+        flex-direction: row;
+        justify-content: space-between;
       }
 
-      .container {
-        padding: 0 0.5rem;
-      }
-
-      select, button {
+      select {
         width: 100%;
-        margin: 0.4rem 0;
       }
 
-      .card {
-        min-height: 220px;
-        padding: 1rem;
-        font-size: 0.95rem;
-      }
-
-      .theme-toggle {
-        padding: 0.4rem;
-      }
-
-      .theme-toggle span {
-        font-size: 20px;
+      .btn-row {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body class="dark">
   <div class="app-wrapper">
-    <button class="theme-toggle" onclick="toggleTheme()">
-      <span class="material-icons">brightness_6</span>
-    </button>
-
     <header>
-      <h1>Bible Verse Viewer</h1>
-      <p>Swipe Card | Share | Explore</p>
+      <div class="heading">Bible Verse Viewer</div>
+      <span class="material-icons theme-toggle" onclick="toggleTheme()">brightness_6</span>
     </header>
 
     <div class="scroll-content">
       <div class="container">
-        <!-- Book & Chapter Select -->
         <div>
           <select id="bookSelect"></select>
           <select id="chapterSelect"></select>
         </div>
 
-        <!-- Verse Card -->
         <div class="card" id="verseCard">
           <div class="verse-ref" id="verseRef">Loading...</div>
           <div id="verseText">Please wait...</div>
@@ -223,7 +208,6 @@
     </div>
   </div>
 
-  <!-- JS -->
   <script>
     const books = [
       'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
@@ -308,8 +292,8 @@
     }
 
     function toggleTheme() {
-      document.body.classList.toggle('dark');
       document.body.classList.toggle('light');
+      document.body.classList.toggle('dark');
     }
 
     function shareVerse() {
