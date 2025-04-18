@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,7 +6,6 @@
   <title>Bible Verse Viewer</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --radius: 12px;
@@ -39,7 +38,7 @@
     }
 
     header {
-      padding: 1.2rem 1rem 0.5rem;
+      padding: 1rem 1rem 0.5rem;
       text-align: center;
       color: #ffffff;
       text-shadow: 0 2px 5px rgba(0,0,0,0.6);
@@ -47,23 +46,27 @@
 
     header h1 {
       font-weight: 600;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin: 0;
     }
 
     .theme-toggle {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 15px;
+      right: 15px;
       z-index: 10;
       background: rgba(0,0,0,0.5);
       border: none;
       border-radius: 50%;
-      padding: 0.6rem;
+      padding: 0.5rem;
       cursor: pointer;
       color: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.4);
       transition: background 0.3s ease;
+    }
+
+    .theme-toggle span {
+      font-size: 22px;
     }
 
     .theme-toggle:hover {
@@ -80,13 +83,13 @@
 
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 500px;
       text-align: center;
       padding: 0 1rem;
     }
 
     select, button {
-      margin: 0.5rem;
+      margin: 0.5rem 0.25rem;
       padding: 0.6rem 1rem;
       font-size: 1rem;
       border-radius: var(--radius);
@@ -111,29 +114,26 @@
     }
 
     .card {
-      position: relative;
-      margin: 2rem auto;
-      width: 90%;
+      margin: 1.5rem auto;
+      width: 100%;
       max-width: 420px;
-      min-height: 300px;
-      background-color: rgba(255, 255, 255, 0.6);
+      min-height: 260px;
+      background-color: rgba(255, 255, 255, 0.5);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 1.5rem;
+      padding: 1.3rem 1rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: transform var(--transition), background-color var(--transition);
-      touch-action: none;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 600;
-      text-shadow: 0 0 1px rgba(0,0,0,0.1);
       backdrop-filter: blur(3px);
+      transition: var(--transition);
     }
 
     body.dark .card {
-      background-color: rgba(43, 58, 66, 0.6);
+      background-color: rgba(43, 58, 66, 0.55);
       color: #f0f0f0;
     }
 
@@ -157,23 +157,48 @@
       justify-content: center;
       gap: 10px;
       margin-top: 1.5rem;
+      flex-wrap: wrap;
     }
 
     @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.3rem;
+      }
+
+      .container {
+        padding: 0 0.5rem;
+      }
+
       select, button {
         width: 100%;
+        margin: 0.4rem 0;
+      }
+
+      .card {
+        min-height: 220px;
+        padding: 1rem;
+        font-size: 0.95rem;
+      }
+
+      .theme-toggle {
+        padding: 0.4rem;
+      }
+
+      .theme-toggle span {
+        font-size: 20px;
       }
     }
   </style>
 </head>
-<body class="light">
-  <button class="theme-toggle" onclick="toggleTheme()">
-    <span class="material-icons">brightness_6</span>
-  </button>
-
+<body class="dark">
   <div class="app-wrapper">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span class="material-icons">brightness_6</span>
+    </button>
+
     <header>
       <h1>Bible Verse Viewer</h1>
+      <p>Swipe Card | Share | Explore</p>
     </header>
 
     <div class="scroll-content">
@@ -190,7 +215,7 @@
           <div id="verseText">Please wait...</div>
           <div class="btn-row">
             <button onclick="shareVerse()">
-              <span class="material-icons">share</span>Share
+              <span class="material-icons">share</span> Share
             </button>
           </div>
         </div>
@@ -198,6 +223,7 @@
     </div>
   </div>
 
+  <!-- JS -->
   <script>
     const books = [
       'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
@@ -296,7 +322,6 @@
       }
     }
 
-    // Touch Swipe Events
     verseCard.addEventListener('touchstart', e => {
       touchStartX = e.changedTouches[0].screenX;
     });
@@ -312,9 +337,9 @@
         verseCard.classList.add('swipe');
         setTimeout(() => verseCard.classList.remove('swipe'), 300);
         if (diff > 0) {
-          prevVerse();  // swipe right
+          prevVerse();
         } else {
-          nextVerse();  // swipe left
+          nextVerse();
         }
       }
     }
