@@ -9,149 +9,118 @@
   <style>
     :root {
       --clr-primary: #4A90E2;
-      --clr-light-bg: rgba(255, 255, 255, 0.75);
-      --clr-dark-bg: rgba(20, 20, 20, 0.75);
+      --clr-light-bg: rgba(255,255,255,0.75);
+      --clr-dark-bg: rgba(20,20,20,0.75);
       --clr-light-text: #333;
       --clr-dark-text: #EEE;
       --radius: 16px;
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      --shadow: 0 8px 24px rgba(0,0,0,0.12);
       --transition: 0.3s ease;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      height: 100%;
-      font-family: 'Inter', sans-serif;
+      height: 100%; font-family: 'Inter', sans-serif;
       background: url('https://images.unsplash.com/photo-1572308482406-010256587e1c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&dl=jon-tyson-H6gTVBETAI4-unsplash.jpg')
                   no-repeat center center fixed;
-      background-size: cover;
-      overflow-y: auto;
+      background-size: cover; overflow-y: auto;
       color: var(--clr-light-text);
       transition: color var(--transition);
     }
     body.dark { color: var(--clr-dark-text); }
+
     .app-wrapper {
       display: flex; flex-direction: column; min-height: 100vh;
-      background-color: var(--clr-light-bg);
-      backdrop-filter: blur(8px);
+      background-color: var(--clr-light-bg); backdrop-filter: blur(8px);
       transition: background-color var(--transition);
     }
     body.dark .app-wrapper {
       background-color: var(--clr-dark-bg);
     }
-    header, footer {
-      padding: 1rem;
-      text-align: center;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; font-weight: 600;
     }
-    header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    header p { font-size: 0.9rem; color: inherit; opacity: 0.8; }
+    header .title-group {
+      display: flex; flex-direction: column; align-items: flex-start;
+    }
+    header h1 { font-size: 1.75rem; }
+    header p {
+      font-size: 0.9rem; opacity: 0.8; margin-top: 4px;
+    }
+    .theme-toggle {
+      background: transparent; border: none;
+      font-size: 1.8rem; color: inherit; cursor: pointer;
+      transition: transform var(--transition);
+    }
+    .theme-toggle:hover { transform: rotate(20deg); }
 
     .scroll-content {
-      flex: 1;
-      padding: 1rem;
+      flex: 1; padding: 1rem;
     }
     .container {
-      max-width: 480px;
-      margin: 0 auto;
-      text-align: center;
+      max-width: 480px; margin: 0 auto; text-align: center;
     }
-    select, button {
-      font-family: inherit;
-      font-size: 1rem;
-      border: none;
-      border-radius: var(--radius);
-      padding: 0.5rem 1rem;
+
+    select, .btn-share {
+      font-family: inherit; font-size: 1rem; border: none;
+      border-radius: var(--radius); padding: 0.5rem 1rem;
       transition: background-color var(--transition), transform var(--transition);
     }
     select {
-      background: rgba(255,255,255,0.9);
-      margin: 0.5rem 0.25rem;
-      color: #444;
+      background: rgba(255,255,255,0.9); margin: 0.5rem 0.25rem; color: #444;
       cursor: pointer;
     }
     body.dark select {
-      background: rgba(30,30,30,0.9);
-      color: #CCC;
-    }
-    button {
-      background: var(--clr-primary);
-      color: #FFF;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      margin-top: 0.75rem;
-    }
-    button:hover {
-      background: darken(var(--clr-primary),10%);
-      transform: translateY(-2px);
+      background: rgba(30,30,30,0.9); color: #CCC;
     }
 
     .card {
-      position: relative;
-      margin: 2rem auto;
-      width: 90%; max-width: 400px;
-      min-height: 320px;
-      background-color: #FFF;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.5rem;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
+      position: relative; margin: 2rem auto; width: 90%; max-width: 400px;
+      min-height: 300px; background-color: #FFF; border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 1.5rem;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
       transition: transform var(--transition);
       touch-action: none;
     }
-    body.dark .card {
-      background: #2B3A42;
-    }
-    .card.swipe {
-      animation: swipeEffect var(--transition);
-    }
+    body.dark .card { background: #2B3A42; }
+    .card.swipe { animation: swipeEffect var(--transition); }
     @keyframes swipeEffect {
-      0% { transform: scale(1.02); }
-      100% { transform: scale(1); }
+      0% { transform: scale(1.02); } 100% { transform: scale(1); }
     }
+
     .verse-ref {
-      font-weight: 600;
-      font-size: 1.25rem;
-      margin-bottom: 1rem;
+      font-weight: 600; font-size: 1.25rem; margin-bottom: 1rem;
     }
     #verseText {
-      font-size: 1rem;
-      line-height: 1.5;
+      font-size: 1rem; line-height: 1.5; text-align: center;
       margin-bottom: 1rem;
-      text-align: center;
-      color: inherit;
     }
 
     .btn-row {
-      margin-top: auto;
-      display: flex; gap: 0.5rem;
+      margin-top: auto; display: flex; gap: 0.5rem;
     }
-
-    footer button {
-      background: transparent;
-      color: inherit;
-      font-size: 1rem;
-      gap: 0.25rem;
-      transform: none;
+    .btn-share {
+      background: var(--clr-primary); color: #FFF;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      cursor: pointer; margin-top: 0.5rem;
     }
-    footer button:hover {
-      background: rgba(0,0,0,0.1);
-    }
-
-    @media (max-width: 480px) {
-      header h1 { font-size: 1.5rem; }
-      .card { min-height: 300px; padding: 1rem; }
+    .btn-share:hover {
+      background: #3A76B5; transform: translateY(-2px);
     }
   </style>
 </head>
 <body class="dark">
   <div class="app-wrapper">
     <header>
-      <h1>Bible Verse Viewer</h1>
-      <p>Swipe to Navigate | Share | Toggle Theme</p>
+      <div class="title-group">
+        <h1>Bible Verse Viewer</h1>
+        <p>Swipe to Navigate & Share</p>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="material-icons">brightness_6</span>
+      </button>
     </header>
 
     <div class="scroll-content">
@@ -165,31 +134,26 @@
           <div class="verse-ref" id="verseRef">Loading…</div>
           <div id="verseText">Please wait…</div>
           <div class="btn-row">
-            <button onclick="shareVerse()">
+            <button class="btn-share" onclick="shareVerse()">
               <span class="material-icons">share</span>Share
             </button>
           </div>
         </div>
       </div>
     </div>
-
-    <footer>
-      <button onclick="toggleTheme()">
-        <span class="material-icons">brightness_6</span>Toggle Theme
-      </button>
-    </footer>
   </div>
 
   <script>
     const books = [
       'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
-      '1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther',
-      'Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel',
+      '1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther',
+      'Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel',
       'Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai',
-      'Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians',
-      'Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy',
-      '2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
+      'Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians',
+      'Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy',
+      '2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
     ];
+
     const bookSelect    = document.getElementById('bookSelect');
     const chapterSelect = document.getElementById('chapterSelect');
     const verseCard     = document.getElementById('verseCard');
@@ -206,8 +170,12 @@
       if (b === currentBook) o.selected = true;
       bookSelect.appendChild(o);
     });
-    bookSelect.addEventListener('change', ()=>{ currentBook = bookSelect.value; currentChapter = 1; updateChapters(); });
-    chapterSelect.addEventListener('change', ()=>{ currentChapter = +chapterSelect.value; fetchVerses(); });
+    bookSelect.addEventListener('change', ()=>{
+      currentBook = bookSelect.value; currentChapter = 1; updateChapters();
+    });
+    chapterSelect.addEventListener('change', ()=>{
+      currentChapter = +chapterSelect.value; fetchVerses();
+    });
 
     function updateChapters(){
       chapterSelect.innerHTML = '';
@@ -223,8 +191,8 @@
     async function fetchVerses(){
       const res = await fetch(`https://bible-api.com/${currentBook}+${currentChapter}`);
       const data = await res.json();
-      verses = data.verses||[];
-      currentVerseIndex=0;
+      verses = data.verses || [];
+      currentVerseIndex = 0;
       showVerse();
     }
 
@@ -235,13 +203,13 @@
       document.getElementById('verseText').textContent = v.text;
     }
 
-    function nextVerse(){ 
-      if(currentVerseIndex < verses.length-1){
+    function nextVerse(){
+      if(currentVerseIndex < verses.length - 1){
         currentVerseIndex++; showVerse();
       }
     }
     function prevVerse(){
-      if(currentVerseIndex>0){
+      if(currentVerseIndex > 0){
         currentVerseIndex--; showVerse();
       }
     }
@@ -260,14 +228,15 @@
     verseCard.addEventListener('touchstart', e=>{ touchStartX = e.changedTouches[0].screenX; });
     verseCard.addEventListener('touchend',   e=>{
       touchEndX = e.changedTouches[0].screenX;
-      const d = touchEndX - touchStartX;
-      if(Math.abs(d)>50){ verseCard.classList.add('swipe');
-        setTimeout(()=>verseCard.classList.remove('swipe'), 300);
-        d>0? prevVerse(): nextVerse();
+      const diff = touchEndX - touchStartX;
+      if(Math.abs(diff) > 50){
+        verseCard.classList.add('swipe');
+        setTimeout(()=> verseCard.classList.remove('swipe'), 300);
+        diff>0 ? prevVerse() : nextVerse();
       }
     });
 
-    // init
+    // Initialize
     updateChapters();
   </script>
 </body>
