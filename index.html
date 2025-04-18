@@ -4,137 +4,192 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bible Verse Viewer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --clr-primary: #4A90E2;
-      --clr-light-bg: rgba(255,255,255,0.75);
-      --clr-dark-bg: rgba(20,20,20,0.75);
-      --clr-light-text: #333;
-      --clr-dark-text: #EEE;
-      --radius: 16px;
-      --shadow: 0 8px 24px rgba(0,0,0,0.12);
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.3);
       --transition: 0.3s ease;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      height: 100%; font-family: 'Inter', sans-serif;
-      background: url('https://images.unsplash.com/photo-1572308482406-010256587e1c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&dl=jon-tyson-H6gTVBETAI4-unsplash.jpg')
-                  no-repeat center center fixed;
-      background-size: cover; overflow-y: auto;
-      color: var(--clr-light-text);
-      transition: color var(--transition);
+    * {
+      box-sizing: border-box;
     }
-    body.dark { color: var(--clr-dark-text); }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://images.unsplash.com/photo-1572308482406-010256587e1c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&dl=jon-tyson-H6gTVBETAI4-unsplash.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+    }
+
+    body.dark {
+      background-color: #0c0c0c;
+      color: #f0f0f0;
+    }
 
     .app-wrapper {
-      display: flex; flex-direction: column; min-height: 100vh;
-      background-color: var(--clr-light-bg); backdrop-filter: blur(8px);
-      transition: background-color var(--transition);
-    }
-    body.dark .app-wrapper {
-      background-color: var(--clr-dark-bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 1.5rem; font-weight: 600;
+      padding: 1.2rem 1rem 0.5rem;
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.6);
     }
-    header .title-group {
-      display: flex; flex-direction: column; align-items: flex-start;
+
+    header h1 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin: 0;
     }
-    header h1 { font-size: 1.75rem; }
-    header p {
-      font-size: 0.9rem; opacity: 0.8; margin-top: 4px;
-    }
+
     .theme-toggle {
-      background: transparent; border: none;
-      font-size: 1.8rem; color: inherit; cursor: pointer;
-      transition: transform var(--transition);
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      border-radius: 50%;
+      padding: 0.6rem;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      transition: background 0.3s ease;
     }
-    .theme-toggle:hover { transform: rotate(20deg); }
+
+    .theme-toggle:hover {
+      background: rgba(0,0,0,0.7);
+    }
 
     .scroll-content {
-      flex: 1; padding: 1rem;
-    }
-    .container {
-      max-width: 480px; margin: 0 auto; text-align: center;
+      padding: 1rem;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    select, .btn-share {
-      font-family: inherit; font-size: 1rem; border: none;
-      border-radius: var(--radius); padding: 0.5rem 1rem;
-      transition: background-color var(--transition), transform var(--transition);
+    .container {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      padding: 0 1rem;
     }
-    select {
-      background: rgba(255,255,255,0.9); margin: 0.5rem 0.25rem; color: #444;
+
+    select, button {
+      margin: 0.5rem;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+      font-family: inherit;
+    }
+
+    button {
+      background-color: #5c6bc0;
+      color: white;
+      border: none;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background var(--transition);
     }
-    body.dark select {
-      background: rgba(30,30,30,0.9); color: #CCC;
+
+    button:hover {
+      background-color: #3f51b5;
     }
 
     .card {
-      position: relative; margin: 2rem auto; width: 90%; max-width: 400px;
-      min-height: 300px; background-color: #FFF; border-radius: var(--radius);
-      box-shadow: var(--shadow); padding: 1.5rem;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      transition: transform var(--transition);
+      position: relative;
+      margin: 2rem auto;
+      width: 90%;
+      max-width: 420px;
+      min-height: 300px;
+      background-color: rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform var(--transition), background-color var(--transition);
       touch-action: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-shadow: 0 0 1px rgba(0,0,0,0.1);
+      backdrop-filter: blur(3px);
     }
-    body.dark .card { background: #2B3A42; }
-    .card.swipe { animation: swipeEffect var(--transition); }
+
+    body.dark .card {
+      background-color: rgba(43, 58, 66, 0.6);
+      color: #f0f0f0;
+    }
+
+    .card.swipe {
+      animation: swipeEffect 0.3s ease;
+    }
+
     @keyframes swipeEffect {
-      0% { transform: scale(1.02); } 100% { transform: scale(1); }
+      0% { transform: scale(1.02); }
+      100% { transform: scale(1); }
     }
 
     .verse-ref {
-      font-weight: 600; font-size: 1.25rem; margin-bottom: 1rem;
-    }
-    #verseText {
-      font-size: 1rem; line-height: 1.5; text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
       margin-bottom: 1rem;
     }
 
     .btn-row {
-      margin-top: auto; display: flex; gap: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1.5rem;
     }
-    .btn-share {
-      background: var(--clr-primary); color: #FFF;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      cursor: pointer; margin-top: 0.5rem;
-    }
-    .btn-share:hover {
-      background: #3A76B5; transform: translateY(-2px);
+
+    @media (max-width: 600px) {
+      select, button {
+        width: 100%;
+      }
     }
   </style>
 </head>
-<body class="dark">
+<body class="light">
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <span class="material-icons">brightness_6</span>
+  </button>
+
   <div class="app-wrapper">
     <header>
-      <div class="title-group">
-        <h1>Bible Verse Viewer</h1>
-        <p>Swipe to Navigate & Share</p>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()">
-        <span class="material-icons">brightness_6</span>
-      </button>
+      <h1>Bible Verse Viewer</h1>
     </header>
 
     <div class="scroll-content">
       <div class="container">
+        <!-- Book & Chapter Select -->
         <div>
           <select id="bookSelect"></select>
           <select id="chapterSelect"></select>
         </div>
 
+        <!-- Verse Card -->
         <div class="card" id="verseCard">
-          <div class="verse-ref" id="verseRef">Loading…</div>
-          <div id="verseText">Please wait…</div>
+          <div class="verse-ref" id="verseRef">Loading...</div>
+          <div id="verseText">Please wait...</div>
           <div class="btn-row">
-            <button class="btn-share" onclick="shareVerse()">
+            <button onclick="shareVerse()">
               <span class="material-icons">share</span>Share
             </button>
           </div>
@@ -146,49 +201,58 @@
   <script>
     const books = [
       'Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth',
-      '1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther',
-      'Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel',
+      '1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther',
+      'Job','Psalms','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel',
       'Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai',
-      'Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians',
-      'Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy',
-      '2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
+      'Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians',
+      'Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy',
+      '2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'
     ];
 
-    const bookSelect    = document.getElementById('bookSelect');
+    const bookSelect = document.getElementById('bookSelect');
     const chapterSelect = document.getElementById('chapterSelect');
-    const verseCard     = document.getElementById('verseCard');
+    const verseCard = document.getElementById('verseCard');
 
-    let currentBook       = 'John';
-    let currentChapter    = 1;
+    let currentBook = 'John';
+    let currentChapter = 1;
     let currentVerseIndex = 0;
-    let verses            = [];
-    let touchStartX       = 0, touchEndX = 0;
+    let verses = [];
 
-    books.forEach(b => {
-      const o = document.createElement('option');
-      o.value = b; o.textContent = b;
-      if (b === currentBook) o.selected = true;
-      bookSelect.appendChild(o);
-    });
-    bookSelect.addEventListener('change', ()=>{
-      currentBook = bookSelect.value; currentChapter = 1; updateChapters();
-    });
-    chapterSelect.addEventListener('change', ()=>{
-      currentChapter = +chapterSelect.value; fetchVerses();
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    books.forEach(book => {
+      const option = document.createElement('option');
+      option.value = book;
+      option.textContent = book;
+      if (book === currentBook) option.selected = true;
+      bookSelect.appendChild(option);
     });
 
-    function updateChapters(){
+    bookSelect.addEventListener('change', () => {
+      currentBook = bookSelect.value;
+      currentChapter = 1;
+      updateChapters();
+    });
+
+    chapterSelect.addEventListener('change', () => {
+      currentChapter = parseInt(chapterSelect.value);
+      fetchVerses();
+    });
+
+    function updateChapters() {
       chapterSelect.innerHTML = '';
-      for(let i=1;i<=50;i++){
-        const o = document.createElement('option');
-        o.value = i; o.textContent = `Chapter ${i}`;
-        if(i===currentChapter) o.selected=true;
-        chapterSelect.appendChild(o);
+      for (let i = 1; i <= 50; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `Chapter ${i}`;
+        if (i === currentChapter) opt.selected = true;
+        chapterSelect.appendChild(opt);
       }
       fetchVerses();
     }
 
-    async function fetchVerses(){
+    async function fetchVerses() {
       const res = await fetch(`https://bible-api.com/${currentBook}+${currentChapter}`);
       const data = await res.json();
       verses = data.verses || [];
@@ -196,47 +260,65 @@
       showVerse();
     }
 
-    function showVerse(){
-      const v = verses[currentVerseIndex];
-      if(!v) return;
-      document.getElementById('verseRef').textContent = `${v.book_name} ${v.chapter}:${v.verse}`;
-      document.getElementById('verseText').textContent = v.text;
+    function showVerse() {
+      const verse = verses[currentVerseIndex];
+      if (!verse) return;
+      document.getElementById('verseRef').textContent = `${verse.book_name} ${verse.chapter}:${verse.verse}`;
+      document.getElementById('verseText').textContent = verse.text;
     }
 
-    function nextVerse(){
-      if(currentVerseIndex < verses.length - 1){
-        currentVerseIndex++; showVerse();
-      }
-    }
-    function prevVerse(){
-      if(currentVerseIndex > 0){
-        currentVerseIndex--; showVerse();
+    function nextVerse() {
+      if (currentVerseIndex < verses.length - 1) {
+        currentVerseIndex++;
+        showVerse();
       }
     }
 
-    function toggleTheme(){
+    function prevVerse() {
+      if (currentVerseIndex > 0) {
+        currentVerseIndex--;
+        showVerse();
+      }
+    }
+
+    function toggleTheme() {
       document.body.classList.toggle('dark');
+      document.body.classList.toggle('light');
     }
 
-    function shareVerse(){
-      const ref = document.getElementById('verseRef').textContent;
-      const txt = `${ref}\n\n${document.getElementById('verseText').textContent}`;
-      if(navigator.share) navigator.share({ text: txt });
-      else { navigator.clipboard.writeText(txt); alert('Copied!'); }
-    }
-
-    verseCard.addEventListener('touchstart', e=>{ touchStartX = e.changedTouches[0].screenX; });
-    verseCard.addEventListener('touchend',   e=>{
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchEndX - touchStartX;
-      if(Math.abs(diff) > 50){
-        verseCard.classList.add('swipe');
-        setTimeout(()=> verseCard.classList.remove('swipe'), 300);
-        diff>0 ? prevVerse() : nextVerse();
+    function shareVerse() {
+      const text = `${document.getElementById('verseRef').textContent}\n\n${document.getElementById('verseText').textContent}`;
+      if (navigator.share) {
+        navigator.share({ text });
+      } else {
+        navigator.clipboard.writeText(text);
+        alert("Verse copied to clipboard!");
       }
+    }
+
+    // Touch Swipe Events
+    verseCard.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
     });
 
-    // Initialize
+    verseCard.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 50) {
+        verseCard.classList.add('swipe');
+        setTimeout(() => verseCard.classList.remove('swipe'), 300);
+        if (diff > 0) {
+          prevVerse();  // swipe right
+        } else {
+          nextVerse();  // swipe left
+        }
+      }
+    }
+
     updateChapters();
   </script>
 </body>
